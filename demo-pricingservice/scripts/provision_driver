@@ -1,0 +1,7 @@
+##DISPLAYNAME provision_driver
+##DESCRIPTION Wipes current driver XVM installations and provisions clean images.
+
+provision the demo-pricingservicedriver xvm
+configure the demo-pricingservicedriver xvm
+deploy to the demo-pricingservicedriver xvm
+

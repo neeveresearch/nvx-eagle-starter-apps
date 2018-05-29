@@ -1,0 +1,39 @@
+##DISPLAYNAME launch_core_vm
+##DESCRIPTION This script launches an XVM instance in the cluster of a core service partition, starts the core service app in the XVM and ensures the app starts per expected role
+##VAR PARTITION [displayName="Partition", type=String, validValues="1,2,3", description="The service partition whose XVM to launch"] 
+##VAR XVMINST [displayName="XVM", type=String, validValues="a,b", description="The specific XVM instance within the partition to launch"] 
+##VAR EXPROLE [displayName="Role", type=String, validValues="Primary,Backup", description="The role that the core service app is expected to assume within the cluster"] 
+
+assume provision_all has run
+
+// launch the XVM
+launch the demo-custservice.${PARTITION::1}${XVMINST::a} xvm
+
+// open CDC
+// ...MAIN
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm to cdcopen
+wait until the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm is cdcopendone
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm cdcstate is Opened
+// ...MPS
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm to mpscdcopen
+wait until the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm is mpscdcopendone
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm mpscdcstate is Opened
+// ...ALERT
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm to alertcdcopen
+wait until the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm is alertcdcopendone
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm alertcdcstate is Opened
+
+// start the app
+start the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm nowait
+wait until the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm is appstartdone
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm appstate is Started
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm role is ${EXPROLE::Primary}
+
+// start CDC
+// ...MAIN
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm to cdcstart
+// ...MPS
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm to mpscdcstart
+// ...ALERT
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${XVMINST::a} xvm to alertcdcstart
+

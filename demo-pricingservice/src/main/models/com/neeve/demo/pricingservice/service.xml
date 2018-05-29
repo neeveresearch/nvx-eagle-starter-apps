@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.neeveresearch.com/schema/x-asml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="demo-pricingservice" namespace="com.neeve.demo.pricingservice">
+    <messages modelFile="com/neeve/demo/pricingservice/messages/messages.xml"/>
+    <state root="Repository" modelFile="com/neeve/demo/pricingservice/state/state.xml"/>
+
+    <modules>
+    </modules>
+
+    <peers>
+        <service modelFile="com/neeve/demo/custservice/service.xml"/>
+    </peers>
+
+    <operations>
+        <!-- GETPRICE -->
+        <operation name="getPrice" type="local" inMessage="GetPriceRequest" outMessage="GetPriceResponse" RESTPath="price/get" RESTMethod="GET"/>
+        <operation name="onGetCustomerResponse" type="local" inMessage="GetCustomerResponse" outMessage="GetPriceResponse">
+            <events>
+                <event message="PriceEvent"/>
+            </events>
+        </operation>
+
+        <operation name="getPriceRemote" type="remote" inMessage="GetPriceRemoteRequest" outMessage="GetPriceResponse" RESTPath="price/getRemote" RESTMethod="GET" />
+        <operation name="getPriceLocal" type="local" inMessage="GetPriceLocalRequest" outMessage="GetPriceResponse">
+            <events>
+                <event message="PriceEvent"/>
+            </events>
+        </operation>
+    </operations>
+</model>

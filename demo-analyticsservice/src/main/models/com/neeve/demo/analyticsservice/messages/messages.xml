@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.neeveresearch.com/schema/x-adml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" namespace="com.neeve.demo.analyticsservice.messages">
+    <import model="com/neeve/service/messages/messages.xml"/>
+
+	<factories>
+		<factory name="MessageFactory" id="33"/>
+	</factories>
+
+	<messages>
+	</messages>
+</model>
+

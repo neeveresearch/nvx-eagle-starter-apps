@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.neeveresearch.com/schema/x-adml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" namespace="com.neeve.demo.custservice.state">
+    <import model="com/neeve/demo/custservice/entities/entities.xml"/>
+
+    <factories>
+        <factory name="StateFactory" id="11"/>
+    </factories>
+
+    <entities>
+        <entity name="Repository" factoryid="11" id="1">
+            <field name="partitions" type="Partitions"/>
+            <field name="customers" type="Customers"/>
+        </entity>
+
+        <entity name="Partition" factoryid="11" id="2">
+            <field name="partitionId" type="Integer"/>
+            <field name="nextCustomerId" type="Long"/>
+        </entity>
+
+        <entity name="Customer" factoryid="11" id="3">
+            <field name="customerId" type="Long" id="1" isKey="true"/>
+            <field name="firstName" type="String" doc="First name of customer" id="2"/>
+            <field name="lastName" type="String" doc="Last name of customer" id="3"/>
+            <!--
+              Put additional Customer domain object fields here
+            -->
+        </entity>
+    </entities>
+
+    <collections>
+        <collection name="Partitions" is="LongMap" contains="Partition" factoryid="11" id="99"/>
+        <collection name="Customers" is="LongMap" contains="Customer" factoryid="11" id="100"/>
+    </collections>
+</model>

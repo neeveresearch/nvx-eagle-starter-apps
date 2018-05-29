@@ -1,0 +1,4 @@
+##DISPLAYNAME deploy
+##DESCRIPTION Deploys new jars to the specified xvm
+
+deploy to the ${XVM} xvm

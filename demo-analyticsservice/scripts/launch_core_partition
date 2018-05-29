@@ -1,0 +1,65 @@
+##DISPLAYNAME launch_core_partition
+##DESCRIPTION This script launches all XVMs in a cluster of a core service partition
+##VAR PARTITION [displayName="Partition", type=String, validValues="1,2,3", description="The service partition whose cluster to launch"] 
+
+assume provision_all has run
+
+// launch the XVMs
+launch the demo-analyticsservice.${PARTITION::1}a xvm
+launch the demo-analyticsservice.${PARTITION::1}b xvm
+
+// open CDC on primary service app
+// ...MAIN
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm to cdcopen
+wait until the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm is cdcopendone
+validate the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm cdcstate is Opened
+// ...MPS
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm to mpscdcopen
+wait until the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm is mpscdcopendone
+validate the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm mpscdcstate is Opened
+// ...ALERT
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm to alertcdcopen
+wait until the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm is alertcdcopendone
+validate the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm alertcdcstate is Opened
+
+// start the primary core service app
+start the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm nowait
+wait until the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm is appstartdone
+validate the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm appstate is Started
+validate the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm role is Primary
+
+// start the backup core service app
+start the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm nowait
+wait until the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm is appstartdone
+validate the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm appstate is Started
+validate the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm role is Backup
+
+// open CDC on backup service app (needs to happen after app start since backup will materialize log from primary)
+// ...MAIN
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm to cdcopen
+wait until the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm is cdcopendone
+validate the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm cdcstate is Opened
+// ...MPS
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm to mpscdcopen
+wait until the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm is mpscdcopendone
+validate the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm mpscdcstate is Opened
+// ...ALERT
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm to alertcdcopen
+wait until the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm is alertcdcopendone
+validate the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm alertcdcstate is Opened
+
+// start CDC on primary 
+// ...MAIN
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm to cdcstart
+// ...MPS
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm to mpscdcstart
+// ...ALERT
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}a xvm to alertcdcstart
+
+// start CDC on backup
+// ...MAIN
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm to cdcstart
+// ...MPS
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm to mpscdcstart
+// ...ALERT
+instruct the demo-analyticsservice-${PARTITION::1} app in the demo-analyticsservice.${PARTITION::1}b xvm to alertcdcstart

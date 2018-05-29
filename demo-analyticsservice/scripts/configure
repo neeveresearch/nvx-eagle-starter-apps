@@ -1,0 +1,4 @@
+##DISPLAYNAME configure
+##DESCRIPTION Configures the specified xvm.
+
+configure the ${XVM} xvm

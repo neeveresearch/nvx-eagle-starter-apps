@@ -1,0 +1,402 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.neeveresearch.com/schema/x-ddl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <env>
+        <!-- X runtime configuration -->
+        <nv>
+            <!-- performance optimization -->
+            <optimizefor>none</optimizefor>
+            <conservecpu>true</conservecpu>
+
+            <!-- Trace loggers (see xvm.env) -->
+
+            <!-- Trace levels -->
+            <event>
+                <stmux.stats.logger.handlers>nvxhandler</stmux.stats.logger.handlers>
+            </event>
+            <ods>
+                <trace>verbose</trace>
+                <logger.handlers>nvxhandler</logger.handlers>
+            </ods>
+            <rog>
+                <trace>info</trace>
+                <logger.handlers>nvxhandler</logger.handlers>
+            </rog>
+            <aep>
+                <trace>config</trace>
+                <logger.handlers>nvxhandler</logger.handlers>
+            </aep>
+
+            <!-- Keep XVM up even when apps are stopped -->
+            <server.autostop.onlastappstop>false</server.autostop.onlastappstop>
+
+            <!-- Stats -->
+            <msg.latency.stats>${DEMO_PRICINGSERVICE_LATENCY_STATS_ENABLE::true}</msg.latency.stats>
+            <ods.latency.stats>${DEMO_PRICINGSERVICE_LATENCY_STATS_ENABLE::true}</ods.latency.stats>
+            <latencymanager.samplesize>1024</latencymanager.samplesize>
+
+            <!-- Discovery (see xvm.env) -->
+            <!-- discovery.descriptor>${DISCOVERY_DESCRIPTOR::${nv.discovery.descriptor::mcast://224.0.1.200:4090}}</discovery.descriptor -->
+        </nv>
+
+        <!-- Service config -->
+        <demo.pricingservice>
+            <!-- Connectivity (see xvm.env) -->
+            <!-- url>${DEMO_PRICINGSERVICE_SERVICE_BUS_CONNECTION_DESCRIPTOR::loopback://demo-pricingservice}</url -->
+            <http.port>${DEMO_PRICINGSERVICE_SERVICE_HTTP_PORT::7780}</http.port>
+
+            <!-- Partitioning -->
+            <numpartitions>${DEMO_PRICINGSERVICE_NUM_PARTITIONS::1}</numpartitions>
+            <partition>${DEMO_PRICINGSERVICE_PARTITION::1}</partition>
+
+            <!-- MPS Trace Interval -->
+            <mps.trace.interval>${DEMO_PRICINGSERVICE_MPS_TRACE_INTERVAL::0}</mps.trace.interval>
+
+            <!-- MPS Logging -->
+            <mps.logging.enabled>${DEMO_PRICINGSERVICE_CDC_MPS_ENABLE::${CDC_MPS_ENABLE::false}}</mps.logging.enabled>
+            <mps.logging.location>rdat</mps.logging.location>
+
+            <!-- Alert Logging -->
+            <alert.logging.enabled>${DEMO_PRICINGSERVICE_CDC_ALERT_ENABLE::false}</alert.logging.enabled>
+            <alert.logging.location>rdat</alert.logging.location>
+
+            <!-- CDC -->
+            <cdc.main.enabled>${DEMO_PRICINGSERVICE_CDC_ENABLE::false}</cdc.main.enabled>
+            <cdc.mps.enabled>${DEMO_PRICINGSERVICE_CDC_MPS_ENABLE::${CDC_MPS_ENABLE::false}}</cdc.mps.enabled>
+            <cdc.alert.enabled>${DEMO_PRICINGSERVICE_CDC_ALERT_ENABLE::false}</cdc.alert.enabled>
+            <db.influx.enabled>${DEMO_PRICINGSERVICE_CDC_INFLUXDB_ENABLE::${CDC_INFLUXDB_ENABLE::false}}</db.influx.enabled>
+            <db.influx.dbname>${DEMO_PRICINGSERVICE_CDC_INFLUXDB_NAME::eagle}</db.influx.dbname>
+            <!-- db.influx.url>${DEMO_PRICINGSERVICE_CDC_INFLUXDB_CONNECTION_DESCRIPTOR::http://localhost:8086}</db.influx.url -->
+            <db.influx.username>${DEMO_PRICINGSERVICE_CDC_INFLUXDB_CONNECTION_USERNAME::root}</db.influx.username>
+            <db.influx.password>${DEMO_PRICINGSERVICE_CDC_INFLUXDB_CONNECTION_PASSWORD::root}</db.influx.password>
+
+            <!-- Thread pool -->
+            <concurrency>1</concurrency>
+
+            <!-- Heartbeats -->
+            <heartbeat.enable>true</heartbeat.enable>
+            <heartbeat.interval>5</heartbeat.interval>
+
+            <!-- Embedded server launch by client -->
+            <client.serverlaunch>false</client.serverlaunch>
+
+            <!-- Trace -->
+            <trace>info</trace>
+            <logger.handlers>demo-pricingservicehandler</logger.handlers>
+            <message.trace>info</message.trace>
+            <message.logger.handlers>demo-pricingservicemessagehandler</message.logger.handlers>
+            <heartbeat.trace>info</heartbeat.trace>
+            <heartbeat.logger.handlers>demo-pricingserviceheartbeathandler</heartbeat.logger.handlers>
+            <mps.trace>info</mps.trace>
+            <mps.logger.handlers>demo-pricingservicempshandler</mps.logger.handlers>
+            <alert.trace>info</alert.trace>
+            <alert.logger.handlers>demo-pricingservicealerthandler</alert.logger.handlers>
+            <cdc.main.trace>info</cdc.main.trace>
+            <cdc.main.logger.handlers>demo-pricingservicemaincdchandler</cdc.main.logger.handlers>
+            <cdc.mps.trace>info</cdc.mps.trace>
+            <cdc.mps.logger.handlers>demo-pricingservicempscdchandler</cdc.mps.logger.handlers>
+            <cdc.alert.trace>info</cdc.alert.trace>
+            <cdc.alert.logger.handlers>demo-pricingservicealertcdchandler</cdc.alert.logger.handlers>
+            <driver.trace>info</driver.trace>
+            <driver.logger.handlers>demo-pricingservicedriverhandler</driver.logger.handlers>
+            <driver.threadstats.trace>info</driver.threadstats.trace>
+            <driver.threadstats.logger.handlers>demo-pricingservicedriverthreadstatshandler</driver.threadstats.logger.handlers>
+            <driver.actionstats.trace>info</driver.actionstats.trace>
+            <driver.actionstats.logger.handlers>demo-pricingservicedriveractionstatshandler</driver.actionstats.logger.handlers>
+        </demo.pricingservice>
+
+        <demo.custservice>
+            <!-- Partitioning -->
+            <numpartitions>${DEMO_CUSTSERVICE_NUM_PARTITIONS::1}</numpartitions>
+
+            <!-- Embedded server launch by client -->
+            <client.serverlaunch>false</client.serverlaunch>
+        </demo.custservice>
+    </env>
+
+    <apps>
+        <app name="demo-pricingservice-1" mainClass="com.neeve.demo.pricingservice.service.App">
+            <storage descriptor="native://.">
+                <checkpointingType>Default</checkpointingType>
+                <checkpointThreshold>1</checkpointThreshold>
+                <checkpointMaxInterval>5</checkpointMaxInterval>
+                <persistenceQuorum>1</persistenceQuorum>
+                <persistence>
+                    <flushOnCommit>true</flushOnCommit>
+                    <initialLogLength>0.01</initialLogLength>
+                    <autoRepair>true</autoRepair>
+                    <cdcEnabled>true</cdcEnabled>
+                    <compactionThreshold>8192</compactionThreshold>
+                    <maxCompactionWindowSize>1024</maxCompactionWindowSize>
+                    <detachedPersist enabled="false"/>
+                </persistence>
+            </storage>
+            <inboundEventMultiplexing>
+                <queueFeedMaxConcurrency>1000</queueFeedMaxConcurrency>
+            </inboundEventMultiplexing>
+            <captureTransactionLatencyStats>${DEMO_PRICINGSERVICE_LATENCY_STATS_ENABLE::true}</captureTransactionLatencyStats>
+            <captureMessageTypeStats>${DEMO_PRICINGSERVICE_LATENCY_STATS_ENABLE::true}</captureMessageTypeStats>
+        </app>
+
+        <app name="demo-pricingservice-2" mainClass="com.neeve.demo.pricingservice.service.App">
+            <storage descriptor="native://.">
+                <checkpointingType>Default</checkpointingType>
+                <checkpointThreshold>1</checkpointThreshold>
+                <checkpointMaxInterval>5</checkpointMaxInterval>
+                <persistenceQuorum>1</persistenceQuorum>
+                <persistence>
+                    <flushOnCommit>true</flushOnCommit>
+                    <initialLogLength>0.01</initialLogLength>
+                    <autoRepair>true</autoRepair>
+                    <cdcEnabled>true</cdcEnabled>
+                    <compactionThreshold>8192</compactionThreshold>
+                    <maxCompactionWindowSize>1024</maxCompactionWindowSize>
+                    <detachedPersist enabled="false"/>
+                </persistence>
+            </storage>
+            <inboundEventMultiplexing>
+                <queueFeedMaxConcurrency>1000</queueFeedMaxConcurrency>
+            </inboundEventMultiplexing>
+            <captureTransactionLatencyStats>${DEMO_PRICINGSERVICE_LATENCY_STATS_ENABLE::true}</captureTransactionLatencyStats>
+            <captureMessageTypeStats>${DEMO_PRICINGSERVICE_LATENCY_STATS_ENABLE::true}</captureMessageTypeStats>
+        </app>
+
+        <app name="demo-pricingservice-3" mainClass="com.neeve.demo.pricingservice.service.App">
+            <storage descriptor="native://.">
+                <checkpointingType>Default</checkpointingType>
+                <checkpointThreshold>1</checkpointThreshold>
+                <checkpointMaxInterval>5</checkpointMaxInterval>
+                <persistenceQuorum>1</persistenceQuorum>
+                <persistence>
+                    <flushOnCommit>true</flushOnCommit>
+                    <initialLogLength>0.01</initialLogLength>
+                    <autoRepair>true</autoRepair>
+                    <cdcEnabled>true</cdcEnabled>
+                    <compactionThreshold>8192</compactionThreshold>
+                    <maxCompactionWindowSize>1024</maxCompactionWindowSize>
+                    <detachedPersist enabled="false"/>
+                </persistence>
+            </storage>
+            <inboundEventMultiplexing>
+                <queueFeedMaxConcurrency>1000</queueFeedMaxConcurrency>
+            </inboundEventMultiplexing>
+            <captureTransactionLatencyStats>${DEMO_PRICINGSERVICE_LATENCY_STATS_ENABLE::true}</captureTransactionLatencyStats>
+            <captureMessageTypeStats>${DEMO_PRICINGSERVICE_LATENCY_STATS_ENABLE::true}</captureMessageTypeStats>
+        </app>
+
+        <app name="demo-pricingserviceweb-1" mainClass="com.neeve.demo.pricingservice.webservice.App"/>
+        <app name="demo-pricingservicedriver" mainClass="com.neeve.demo.pricingservice.driver.App"/>
+    </apps>
+
+    <servers>
+        <server name="demo-pricingservice.1a">
+            <apps>
+                <app name="demo-pricingservice-1" autoStart="false"/>
+            </apps>
+            <heartbeats enabled="${DEMO_PRICINGSERVICE_XVM_STATS_ENABLE::${XVM_STATS_ENABLE::true}}" interval="${DEMO_PRICINGSERVICE_XVM_STATS_INTERVAL::${XVM_STATS_INTERVAL::5}}">
+                <collectSeriesStats>true</collectSeriesStats>
+                <collectSeriesDatapoints>false</collectSeriesDatapoints>
+                <collectPoolStats>false</collectPoolStats>
+                <collectIndividualThreadStats>false</collectIndividualThreadStats>
+                <includeMessageTypeStats>true</includeMessageTypeStats>
+                <tracing enabled="true">
+                    <traceAppStats>true</traceAppStats>
+                    <traceAdminClientStats>false</traceAdminClientStats>
+                    <tracePoolStats>false</tracePoolStats>
+                    <traceSysStats>false</traceSysStats>
+                    <traceThreadStats>false</traceThreadStats>
+                    <traceUserStats>false</traceUserStats>
+                </tracing>
+            </heartbeats>
+        </server>
+
+        <server name="demo-pricingservice.1b">
+            <apps>
+                <app name="demo-pricingservice-1" autoStart="false"/>
+            </apps>
+            <heartbeats enabled="${DEMO_PRICINGSERVICE_XVM_STATS_ENABLE::${XVM_STATS_ENABLE::true}}" interval="${DEMO_PRICINGSERVICE_XVM_STATS_INTERVAL::${XVM_STATS_INTERVAL::5}}">
+                <collectSeriesStats>true</collectSeriesStats>
+                <collectSeriesDatapoints>false</collectSeriesDatapoints>
+                <collectPoolStats>false</collectPoolStats>
+                <collectIndividualThreadStats>false</collectIndividualThreadStats>
+                <includeMessageTypeStats>true</includeMessageTypeStats>
+                <tracing enabled="true">
+                    <traceAppStats>true</traceAppStats>
+                    <traceAdminClientStats>false</traceAdminClientStats>
+                    <tracePoolStats>false</tracePoolStats>
+                    <traceSysStats>false</traceSysStats>
+                    <traceThreadStats>false</traceThreadStats>
+                    <traceUserStats>false</traceUserStats>
+                </tracing>
+            </heartbeats>
+        </server>
+
+        <server name="demo-pricingservice.2a">
+            <apps>
+                <app name="demo-pricingservice-2" autoStart="false"/>
+            </apps>
+            <heartbeats enabled="${DEMO_PRICINGSERVICE_XVM_STATS_ENABLE::${XVM_STATS_ENABLE::true}}" interval="${DEMO_PRICINGSERVICE_XVM_STATS_INTERVAL::${XVM_STATS_INTERVAL::5}}">
+                <collectSeriesStats>true</collectSeriesStats>
+                <collectSeriesDatapoints>false</collectSeriesDatapoints>
+                <collectPoolStats>false</collectPoolStats>
+                <collectIndividualThreadStats>false</collectIndividualThreadStats>
+                <includeMessageTypeStats>true</includeMessageTypeStats>
+                <tracing enabled="true">
+                    <traceAppStats>true</traceAppStats>
+                    <traceAdminClientStats>false</traceAdminClientStats>
+                    <tracePoolStats>false</tracePoolStats>
+                    <traceSysStats>false</traceSysStats>
+                    <traceThreadStats>false</traceThreadStats>
+                    <traceUserStats>false</traceUserStats>
+                </tracing>
+            </heartbeats>
+        </server>
+
+        <server name="demo-pricingservice.2b">
+            <apps>
+                <app name="demo-pricingservice-2" autoStart="false"/>
+            </apps>
+            <heartbeats enabled="${DEMO_PRICINGSERVICE_XVM_STATS_ENABLE::${XVM_STATS_ENABLE::true}}" interval="${DEMO_PRICINGSERVICE_XVM_STATS_INTERVAL::${XVM_STATS_INTERVAL::5}}">
+                <collectSeriesStats>true</collectSeriesStats>
+                <collectSeriesDatapoints>false</collectSeriesDatapoints>
+                <collectPoolStats>false</collectPoolStats>
+                <collectIndividualThreadStats>false</collectIndividualThreadStats>
+                <includeMessageTypeStats>true</includeMessageTypeStats>
+                <tracing enabled="true">
+                    <traceAppStats>true</traceAppStats>
+                    <traceAdminClientStats>false</traceAdminClientStats>
+                    <tracePoolStats>false</tracePoolStats>
+                    <traceSysStats>false</traceSysStats>
+                    <traceThreadStats>false</traceThreadStats>
+                    <traceUserStats>false</traceUserStats>
+                </tracing>
+            </heartbeats>
+        </server>
+
+        <server name="demo-pricingservice.3a">
+            <apps>
+                <app name="demo-pricingservice-3" autoStart="false"/>
+            </apps>
+            <heartbeats enabled="${DEMO_PRICINGSERVICE_XVM_STATS_ENABLE::${XVM_STATS_ENABLE::true}}" interval="${DEMO_PRICINGSERVICE_XVM_STATS_INTERVAL::${XVM_STATS_INTERVAL::5}}">
+                <collectSeriesStats>true</collectSeriesStats>
+                <collectSeriesDatapoints>false</collectSeriesDatapoints>
+                <collectPoolStats>false</collectPoolStats>
+                <collectIndividualThreadStats>false</collectIndividualThreadStats>
+                <includeMessageTypeStats>true</includeMessageTypeStats>
+                <tracing enabled="true">
+                    <traceAppStats>true</traceAppStats>
+                    <traceAdminClientStats>false</traceAdminClientStats>
+                    <tracePoolStats>false</tracePoolStats>
+                    <traceSysStats>false</traceSysStats>
+                    <traceThreadStats>false</traceThreadStats>
+                    <traceUserStats>false</traceUserStats>
+                </tracing>
+            </heartbeats>
+        </server>
+
+        <server name="demo-pricingservice.3b">
+            <apps>
+                <app name="demo-pricingservice-3" autoStart="false"/>
+            </apps>
+            <heartbeats enabled="${DEMO_PRICINGSERVICE_XVM_STATS_ENABLE::${XVM_STATS_ENABLE::true}}" interval="${DEMO_PRICINGSERVICE_XVM_STATS_INTERVAL::${XVM_STATS_INTERVAL::5}}">
+                <collectSeriesStats>true</collectSeriesStats>
+                <collectSeriesDatapoints>false</collectSeriesDatapoints>
+                <collectPoolStats>false</collectPoolStats>
+                <collectIndividualThreadStats>false</collectIndividualThreadStats>
+                <includeMessageTypeStats>true</includeMessageTypeStats>
+                <tracing enabled="true">
+                    <traceAppStats>true</traceAppStats>
+                    <traceAdminClientStats>false</traceAdminClientStats>
+                    <tracePoolStats>false</tracePoolStats>
+                    <traceSysStats>false</traceSysStats>
+                    <traceThreadStats>false</traceThreadStats>
+                    <traceUserStats>false</traceUserStats>
+                </tracing>
+            </heartbeats>
+        </server>
+
+        <server name="demo-pricingserviceweb.1">
+            <apps>
+                <app name="demo-pricingserviceweb-1" autoStart="false"/>
+            </apps>
+            <heartbeats enabled="${DEMO_PRICINGSERVICE_XVM_STATS_ENABLE::${XVM_STATS_ENABLE::true}}" interval="${DEMO_PRICINGSERVICE_XVM_STATS_INTERVAL::${XVM_STATS_INTERVAL::5}}">
+                <collectSeriesStats>true</collectSeriesStats>
+                <collectSeriesDatapoints>false</collectSeriesDatapoints>
+                <collectPoolStats>false</collectPoolStats>
+                <collectIndividualThreadStats>false</collectIndividualThreadStats>
+                <includeMessageTypeStats>true</includeMessageTypeStats>
+                <tracing enabled="true">
+                    <traceAppStats>true</traceAppStats>
+                    <traceAdminClientStats>false</traceAdminClientStats>
+                    <tracePoolStats>false</tracePoolStats>
+                    <traceSysStats>false</traceSysStats>
+                    <traceThreadStats>false</traceThreadStats>
+                    <traceUserStats>false</traceUserStats>
+                </tracing>
+            </heartbeats>
+        </server>
+
+        <server name="demo-pricingserviceweb.2">
+            <apps>
+                <app name="demo-pricingserviceweb-1" autoStart="false"/>
+            </apps>
+            <heartbeats enabled="${DEMO_PRICINGSERVICE_XVM_STATS_ENABLE::${XVM_STATS_ENABLE::true}}" interval="${DEMO_PRICINGSERVICE_XVM_STATS_INTERVAL::${XVM_STATS_INTERVAL::5}}">
+                <collectSeriesStats>true</collectSeriesStats>
+                <collectSeriesDatapoints>false</collectSeriesDatapoints>
+                <collectPoolStats>false</collectPoolStats>
+                <collectIndividualThreadStats>false</collectIndividualThreadStats>
+                <includeMessageTypeStats>true</includeMessageTypeStats>
+                <tracing enabled="true">
+                    <traceAppStats>true</traceAppStats>
+                    <traceAdminClientStats>false</traceAdminClientStats>
+                    <tracePoolStats>false</tracePoolStats>
+                    <traceSysStats>false</traceSysStats>
+                    <traceThreadStats>false</traceThreadStats>
+                    <traceUserStats>false</traceUserStats>
+                </tracing>
+            </heartbeats>
+        </server>
+
+        <server name="demo-pricingserviceweb.3">
+            <apps>
+                <app name="demo-pricingserviceweb-1" autoStart="false"/>
+            </apps>
+            <heartbeats enabled="${DEMO_PRICINGSERVICE_XVM_STATS_ENABLE::${XVM_STATS_ENABLE::true}}" interval="${DEMO_PRICINGSERVICE_XVM_STATS_INTERVAL::${XVM_STATS_INTERVAL::5}}">
+                <collectSeriesStats>true</collectSeriesStats>
+                <collectSeriesDatapoints>false</collectSeriesDatapoints>
+                <collectPoolStats>false</collectPoolStats>
+                <collectIndividualThreadStats>false</collectIndividualThreadStats>
+                <includeMessageTypeStats>true</includeMessageTypeStats>
+                <tracing enabled="true">
+                    <traceAppStats>true</traceAppStats>
+                    <traceAdminClientStats>false</traceAdminClientStats>
+                    <tracePoolStats>false</tracePoolStats>
+                    <traceSysStats>false</traceSysStats>
+                    <traceThreadStats>false</traceThreadStats>
+                    <traceUserStats>false</traceUserStats>
+                </tracing>
+            </heartbeats>
+        </server>
+
+        <server name="demo-pricingservicedriver">
+            <apps>
+                <app name="demo-pricingservicedriver" autoStart="false"/>
+            </apps>
+            <heartbeats enabled="${DEMO_PRICINGSERVICE_XVM_STATS_ENABLE::${XVM_STATS_ENABLE::true}}" interval="${DEMO_PRICINGSERVICE_XVM_STATS_INTERVAL::${XVM_STATS_INTERVAL::5}}">
+                <collectSeriesStats>true</collectSeriesStats>
+                <collectSeriesDatapoints>false</collectSeriesDatapoints>
+                <collectPoolStats>false</collectPoolStats>
+                <collectIndividualThreadStats>false</collectIndividualThreadStats>
+                <includeMessageTypeStats>true</includeMessageTypeStats>
+                <tracing enabled="true">
+                    <traceAppStats>true</traceAppStats>
+                    <traceAdminClientStats>false</traceAdminClientStats>
+                    <tracePoolStats>false</tracePoolStats>
+                    <traceSysStats>false</traceSysStats>
+                    <traceThreadStats>false</traceThreadStats>
+                    <traceUserStats>false</traceUserStats>
+                </tracing>
+            </heartbeats>
+        </server>
+    </servers>
+</model>
+

@@ -1,0 +1,4 @@
+##DISPLAYNAME provision
+##DESCRIPTION Wipes current XVM installation and provisions clean images.
+
+provision the ${XVM} xvm

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.neeveresearch.com/schema/x-adml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" namespace="com.neeve.demo.pricingservice.messages">
+    <import model="com/neeve/service/messages/messages.xml"/>
+
+	<factories>
+		<factory name="MessageFactory" id="23"/>
+	</factories>
+
+	<messages>
+        <message name="GetPriceRequest" factoryid="23" id="1">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="sku" type="Long" id="2" doc="The product whose price is being requested"/>
+            <field name="customerId" type="Long" id="3" doc="The customer for whom the price is being requested"/>
+        </message>
+
+        <message name="GetPriceResponse" factoryid="23" id="2">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="price" type="Double" id="2" doc="The returned price"/>
+        </message>
+
+        <message name="PriceEvent" factoryid="23" id="3">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="sku" type="Long" id="2" doc="The product whose price was determined"/>
+            <field name="customerId" type="Long" id="3" doc="The customer for whom the price was determined"/>
+            <field name="price" type="Double" id="4" doc="The determined price"/>
+        </message>
+        
+        <message name="GetPriceRemoteRequest" factoryid="23" id="4">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="sku" type="Long" id="2" doc="The product whose price is being requested"/>
+            <field name="customerId" type="Long" id="3" doc="The customer for whom the price is being requested"/>
+        </message>
+
+        <message name="GetPriceLocalRequest" factoryid="23" id="5">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="sku" type="Long" id="2" doc="The product whose price is being requested"/>
+            <field name="customerId" type="Long" id="3" doc="The customer for whom the price is being requested"/>
+            <field name="backendVal" type="String" id="4" doc="Value from a backend system"/>
+        </message>
+	</messages>
+</model>
+

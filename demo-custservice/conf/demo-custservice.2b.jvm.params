@@ -1,0 +1,2 @@
+${DEMO_CUSTSERVICE_2b_JVM_PARAMS::-Xms1g -Xmx1g}
+

@@ -1,0 +1,13 @@
+##DISPLAYNAME launch_web_partition
+##DESCRIPTION This script launches the web service XVM of a specified partition
+##VAR PARTITION [displayName="Partition", type=String, validValues="1,2,3", description="The web service partition to launch"] 
+
+assume provision_all has run
+
+// launch the XVMs
+launch the demo-pricingserviceweb.${PARTITION::1} xvm
+
+// start the web service app
+start the demo-pricingserviceweb-${PARTITION::1} app in the demo-pricingserviceweb.${PARTITION::1} xvm nowait
+wait until the demo-pricingserviceweb-${PARTITION::1} app in the demo-pricingserviceweb.${PARTITION::1} xvm is appstartdone
+validate the demo-pricingserviceweb-${PARTITION::1} app in the demo-pricingserviceweb.${PARTITION::1} xvm appstate is Started

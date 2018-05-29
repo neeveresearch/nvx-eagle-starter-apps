@@ -1,0 +1,51 @@
+##DISPLAYNAME run_driver
+##DESCRIPTION Launches and runs the performance driver
+##VAR SEEDCOUNT [displayName="SeedCount", type=Int, description="The number of customers to seed the customer service with prior to running the test"] 
+##VAR SEEDCONCURRENCY [displayName="SeedConcurrency", type=Int, description="The number of concurrent threads to use to seed the customers in the service"] 
+##VAR USE_REST [displayName="UseREST", type=Boolean, description="Whether the requestors should use the service REST API to issue requests"] 
+##VAR REQUESTORS [displayName="NumRequestors", type=Int, description="The number of requestors that will concurrently send requests"] 
+##VAR COUNT [displayName="RequestCount", type=Int, description="The number of requests each requestor will send"]  
+##VAR RATE [displayName="RequestRate", type=Int, description="The rate at which the each requestor will issue requests"]  
+##VAR THREADS [displayName="NumRequestThreads", type=Int, description="The number of concurrent threads used the each requestor to issue requests"]  
+##VAR NOOP_PCT [displayName="NoopPct", type=Int, description="The percentage of no-op requests to send by each requestor"]  
+##VAR PING_PCT [displayName="PingPct", type=Int, description="The percentage of ping requests to send by each requestor"]  
+##VAR CREATECUSTOMER_PCT [displayName="CreateCustomerPct", type=Int, description="The percentage of create customer requests to send by each requestor"]  
+##VAR GETCUSTOMER_PCT [displayName="GetCustomerPct", type=Int, description="The percentage of get customer requests to send by each requestor"]  
+##VAR UPDATECUSTOMER_PCT [displayName="UpdateCustomerPct", type=Int, description="The percentage of update customer requests to send by each requestor"]  
+##VAR DELETECUSTOMER_PCT [displayName="DeleteCustomerPct", type=Int, description="The percentage of delete customer requests to send by each requestor"]  
+
+// prep
+assume provision_driver has run
+
+// launch
+launch the demo-custservicedriver xvm
+start the demo-custservicedriver app in the demo-custservicedriver xvm
+
+// seed 
+instruct the demo-custservicedriver app in the demo-custservicedriver xvm to seed with ${SEEDCOUNT::10000} ${SEEDCONCURRENCY::8}
+
+// configure requestors
+instruct the demo-custservicedriver app in the demo-custservicedriver xvm to configurerequestors with ${REQUESTORS::1} ${COUNT::100000} ${RATE::1000} ${THREADS::1} ${USE_REST::false} 
+
+// wait until the card seeding is complete and then kick off test run
+wait until the demo-custservicedriver app in the demo-custservicedriver xvm is seeddone
+
+// configure action profile 
+instruct the demo-custservicedriver app in the demo-custservicedriver xvm to resetactions
+instruct the demo-custservicedriver app in the demo-custservicedriver xvm to addaction with Noop ${NOOP_PCT::00.00}
+instruct the demo-custservicedriver app in the demo-custservicedriver xvm to addaction with Ping ${PING_PCT::100.00}
+instruct the demo-custservicedriver app in the demo-custservicedriver xvm to addaction with CreateCustomer ${CREATECUSTOMER_PCT::00.00}
+instruct the demo-custservicedriver app in the demo-custservicedriver xvm to addaction with GetCustomer ${GETCUSTOMER_PCT::00.00} 
+instruct the demo-custservicedriver app in the demo-custservicedriver xvm to addaction with UpdateCustomer ${UPDATECUSTOMER_PCT::00.00} 
+instruct the demo-custservicedriver app in the demo-custservicedriver xvm to addaction with DeleteCustomer ${DELETECUSTOMER_PCT::00.00} 
+
+// run
+instruct the demo-custservicedriver app in the demo-custservicedriver xvm to run
+wait until the demo-custservicedriver app in the demo-custservicedriver xvm is done
+
+// collect stats
+collect stats from the demo-custservicedriver app in the demo-custservicedriver xvm record as demo-custservice_driver_results
+
+// shutdown
+stop the demo-custservicedriver app in the demo-custservicedriver xvm
+shutdown

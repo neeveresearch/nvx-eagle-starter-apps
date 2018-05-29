@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.neeveresearch.com/schema/x-asml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="demo-analyticsservice" namespace="com.neeve.demo.analyticsservice">
+    <messages modelFile="com/neeve/demo/analyticsservice/messages/messages.xml"/>
+    <state root="Repository" modelFile="com/neeve/demo/analyticsservice/state/state.xml"/>
+
+    <modules>
+    </modules>
+
+    <peers>
+        <service modelFile="com/neeve/demo/pricingservice/service.xml"/>
+    </peers>
+
+    <operations>
+        <operation name="handlePriceEvent" type="local" inMessage="PriceEvent"/>
+    </operations>
+</model>

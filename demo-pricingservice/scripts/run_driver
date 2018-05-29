@@ -1,0 +1,37 @@
+##DISPLAYNAME run_driver
+##DESCRIPTION Launches and runs the performance driver
+##VAR USE_REST [displayName="UseREST", type=Boolean, description="Whether the requestors should use the service REST API to issue requests"] 
+##VAR REQUESTORS [displayName="NumRequestors", type=Int, description="The number of requestors that will concurrently send requests"] 
+##VAR COUNT [displayName="RequestCount", type=Int, description="The number of requests each requestor will send"]  
+##VAR RATE [displayName="RequestRate", type=Int, description="The rate at which the each requestor will issue requests"]  
+##VAR THREADS [displayName="NumRequestThreads", type=Int, description="The number of concurrent threads used the each requestor to issue requests"]  
+##VAR NOOP_PCT [displayName="NoopPct", type=Int, description="The percentage of no-op requests to send by each requestor"]  
+##VAR PING_PCT [displayName="PingPct", type=Int, description="The percentage of ping requests to send by each requestor"]  
+##VAR GETPRICE_PCT [displayName="GetPricePct", type=Int, description="The percentage of create pricing requests to send by each requestor"]  
+
+// prep
+assume provision_driver has run
+
+// launch
+launch the demo-pricingservicedriver xvm
+start the demo-pricingservicedriver app in the demo-pricingservicedriver xvm
+
+// configure requestors
+instruct the demo-pricingservicedriver app in the demo-pricingservicedriver xvm to configurerequestors with ${REQUESTORS::1} ${COUNT::100000} ${RATE::1000} ${THREADS::1} ${USE_REST::false} 
+
+// configure action profile 
+instruct the demo-pricingservicedriver app in the demo-pricingservicedriver xvm to resetactions
+instruct the demo-pricingservicedriver app in the demo-pricingservicedriver xvm to addaction with Noop ${NOOP_PCT::00.00}
+instruct the demo-pricingservicedriver app in the demo-pricingservicedriver xvm to addaction with Ping ${PING_PCT::100.00}
+instruct the demo-pricingservicedriver app in the demo-pricingservicedriver xvm to addaction with GetPrice ${GETPRICE_PCT::00.00}
+
+// run
+instruct the demo-pricingservicedriver app in the demo-pricingservicedriver xvm to run
+wait until the demo-pricingservicedriver app in the demo-pricingservicedriver xvm is done
+
+// collect stats
+collect stats from the demo-pricingservicedriver app in the demo-pricingservicedriver xvm record as demo-pricingservice_driver_results
+
+// shutdown
+stop the demo-pricingservicedriver app in the demo-pricingservicedriver xvm
+shutdown

@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.neeveresearch.com/schema/x-asml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="demo-custservice" namespace="com.neeve.demo.custservice">
+    <documentation brief="Demo Customer Service">
+        This demo service provides CRUD operations for customer objects
+    </documentation>
+    <messages modelFile="com/neeve/demo/custservice/messages/messages.xml"/>
+    <state root="Repository" modelFile="com/neeve/demo/custservice/state/state.xml"/>
+
+    <modules>
+    </modules>
+
+    <peers>
+    </peers>
+
+    <operations>
+        <!-- CREATE -->
+        <operation name="createCustomer" type="local" inMessage="CreateCustomerRequest" outMessage="CreateCustomerResponse" RESTPath="customer/create" RESTMethod="POST">
+            <documentation brief="create Customer">
+                Create a new Customer object.
+                Returns customer id.
+            </documentation>
+            <events>
+                <event message="CustomerCreatedEvent"/>
+            </events>
+        </operation>
+
+        <!-- READ (GET) -->
+        <operation name="getCustomer" type="local" inMessage="GetCustomerRequest" outMessage="GetCustomerResponse" RESTPath="customer/get" RESTMethod="GET">
+            <documentation brief="get Customer by id" />
+        </operation>
+
+        <!-- UPDATE -->
+        <operation name="updateCustomer" type="local" inMessage="UpdateCustomerRequest" outMessage="UpdateCustomerResponse" RESTPath="customer/update" RESTMethod="POST">
+            <documentation brief="update Customer">
+                Update an existing Customer object.
+            </documentation>
+            <events>
+                <event message="CustomerUpdatedEvent"/>
+            </events>
+        </operation>
+
+        <!-- DELETE -->
+        <operation name="deleteCustomer" type="local" inMessage="DeleteCustomerRequest" outMessage="DeleteCustomerResponse" RESTPath="customer/delete" RESTMethod="POST">
+            <documentation brief="delete Customer">
+                Deletes existing Customer object.
+            </documentation>
+            <events>
+                <event message="CustomerDeletedEvent"/>
+            </events>
+        </operation>
+    </operations>
+</model>

@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.neeveresearch.com/schema/x-adml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" namespace="com.neeve.demo.custservice.messages">
+    <import model="com/neeve/service/messages/messages.xml"/>
+    <import model="com/neeve/demo/custservice/entities/entities.xml"/>
+
+    <factories>
+        <factory name="MessageFactory" id="13"/>
+    </factories>
+
+    <messages>
+        <!-- CREATE -->
+        <message name="CreateCustomerRequest" factoryid="13" id="1" doc="Create customer request">
+            <documentation>
+                Request used to create a new customer
+            </documentation>
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="firstName" type="String" doc="first name of customer" id="2">
+                <documentation>Customer's first name</documentation>
+            </field>
+            <field name="lastName" type="String" doc="last name of customer" id="3"/>
+            <!--
+              Put additionial Customer fields here that can be set during Customer create
+            -->
+        </message>
+        <message name="CreateCustomerResponse" factoryid="13" id="2" doc="Create customer response">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="customerId" type="Long" doc="The system generated unique id of the added Customer" id="2"/>
+        </message>
+        <message name="CustomerCreatedEvent" factoryid="13" id="3">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="customerId" type="Long" id="2"/>
+            <field name="firstName" type="String" doc="first name of customer" id="3"/>
+            <field name="lastName" type="String" doc="last name of customer" id="4"/>
+            <!--
+              Put Customer fields here that can are communicated in the Customer created event
+            -->
+        </message>
+
+        <!-- READ (GET) -->
+        <message name="GetCustomerRequest" factoryid="13" id="4">
+            <documentation>
+                Request used to get a customer by id
+            </documentation>
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="customerId" type="Long" doc="id of customer to get" id="2"/>
+        </message>
+        <message name="GetCustomerResponse" factoryid="13" id="5">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="customerId" type="Long" doc="id of customer" id="2"/>
+            <field name="firstName" type="String" doc="first name of customer" id="3"/>
+            <field name="lastName" type="String" doc="last name of customer" id="4"/>
+            <!--
+              Put additional Customer fields here that can be fetched by the Customer get request
+            -->
+        </message>
+
+        <!-- UPDATE -->
+        <message name="UpdateCustomerRequest" factoryid="13" id="6" doc="Update customer request">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="customerId" type="Long" id="2"/>
+            <field name="firstName" type="String" doc="first name of customer" id="3"/>
+            <field name="lastName" type="String" doc="last name of customer" id="4"/>
+            <!--
+              Put Customer fields here that can be set during Customer update
+            -->
+        </message>
+        <message name="UpdateCustomerResponse" factoryid="13" id="7" doc="Update customer response">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+        </message>
+        <message name="CustomerUpdatedEvent" factoryid="13" id="8" doc="Customer updated event">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="customerId" type="Long" id="2"/>
+            <field name="firstName" type="String" doc="first name of customer" id="3"/>
+            <field name="lastName" type="String" doc="last name of customer" id="4"/>
+            <!--
+              Put Customer fields here that can are communicated in the Customer update event
+            -->
+        </message>
+
+        <!-- DELETE -->
+        <message name="DeleteCustomerRequest" factoryid="13" id="9">
+            <documentation>
+                Request used to delete a customer
+            </documentation>
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="customerId" type="Long" id="2"/>
+            <!--
+              Put Customer fields here that can be set during Customer delete
+            -->
+        </message>
+        <message name="DeleteCustomerResponse" factoryid="13" id="10">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+        </message>
+        <message name="CustomerDeletedEvent" factoryid="13" id="11">
+            <field name="header" type="com.neeve.service.messages.MessageHeader" id="1"/>
+            <field name="customerId" type="Long" id="2"/>
+            <!--
+              Put Customer fields here that can are communicated in the Customer delete event
+            -->
+        </message>
+    </messages>
+</model>

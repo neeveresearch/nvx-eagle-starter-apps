@@ -1,0 +1,58 @@
+##DISPLAYNAME shutdown_core_partition
+##DESCRIPTION This script shuts down all XVMs in the cluster of a service partition
+##VAR PARTITION [displayName="Partition", type=String, validValues="1,2,3", description="The service partition whose cluster to shut down"] 
+##VAR FIRSTXVMINST [displayName="FirstXVM", type=String, validValues="a,b", description="The first XVM instance within the partition to shut down"] 
+##VAR SECONDXVMINST [displayName="SecondXVM", type=String, validValues="a,b", description="The second XVM instance within the partition to shut down"] 
+
+assume provision_all has run
+
+// stop the core service app in the first XVM instance
+stop the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm
+
+// stop the core service app in the second XVM instance
+stop the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::b} xvm
+
+// stop and close CDC in the first XVM instance
+// ...MAIN
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm to cdcstop
+wait until the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm is cdcstopdone
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm cdcstate is Stopped
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm to cdcclose
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm cdcstate is Closed
+// ...MPS
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm to mpscdcstop
+wait until the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm is mpscdcstopdone
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm mpscdcstate is Stopped
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm to mpscdcclose
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm mpscdcstate is Closed
+// ...ALERT
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm to alertcdcstop
+wait until the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm is alertcdcstopdone
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm alertcdcstate is Stopped
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm to alertcdcclose
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm alertcdcstate is Closed
+
+// stop and close CDC in the second XVM instance
+// ...MAIN
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm to cdcstop
+wait until the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm is cdcstopdone
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm cdcstate is Stopped
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm to cdcclose
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm cdcstate is Closed
+// ...MPS
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm to mpscdcstop
+wait until the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm is mpscdcstopdone
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm mpscdcstate is Stopped
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm to mpscdcclose
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm mpscdcstate is Closed
+// ...ALERT
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm to alertcdcstop
+wait until the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm is alertcdcstopdone
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm alertcdcstate is Stopped
+instruct the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm to alertcdcclose
+validate the demo-custservice-${PARTITION::1} app in the demo-custservice.${PARTITION::1}${SECONDXVMINST::a} xvm alertcdcstate is Closed
+
+// shutdown the XVMs
+shutdown the demo-custservice.${PARTITION::1}${FIRSTXVMINST::a} xvm
+shutdown the demo-custservice.${PARTITION::1}${SECONDXVMINST::b} xvm
+

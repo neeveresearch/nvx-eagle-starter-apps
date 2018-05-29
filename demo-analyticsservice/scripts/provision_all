@@ -1,0 +1,7 @@
+##DISPLAYNAME provision_all
+##DESCRIPTION Wipes current XVM installations and provisions clean images.
+
+provision all xvms
+configure all xvms
+deploy to all xvms
+

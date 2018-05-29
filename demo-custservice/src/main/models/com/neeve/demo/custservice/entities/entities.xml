@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.neeveresearch.com/schema/x-adml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" namespace="com.neeve.demo.custservice.entities">
+    <!--
+        Put entities that are common between the messaging and state models here.
+     --> 
+    <factories>
+        <factory name="EntityFactory" id="12"/>
+    </factories>
+
+    <entities>
+    </entities>
+</model>

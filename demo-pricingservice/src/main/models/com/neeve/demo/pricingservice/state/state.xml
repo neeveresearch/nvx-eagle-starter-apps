@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<model xmlns="http://www.neeveresearch.com/schema/x-adml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" namespace="com.neeve.demo.pricingservice.state">
+	<factories>
+		<factory name="StateFactory" id="21"/>
+	</factories>
+
+	<entities>
+		<entity name="Repository" factoryid="21" id="1">
+            <field name="priceRequestContexts" type="PriceRequestContexts"/>
+		</entity>
+
+        <entity name="PriceRequestContext" factoryid="21" id="2">
+            <field name="requestId" type="String" isKey="true" id="1"/>
+            <field name="sourceId" type="String" id="2"/>
+            <field name="sku" type="Long" id="3"/>
+            <field name="customerId" type="Long" id="4"/>
+        </entity>
+	</entities>
+
+	<collections>
+        <collection name="PriceRequestContexts" is="StringMap" contains="PriceRequestContext" factoryid="21" id="100"/>
+	</collections>
+</model>

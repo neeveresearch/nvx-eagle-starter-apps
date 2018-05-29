@@ -1,0 +1,12 @@
+##DISPLAYNAME shutdown_web_partition
+##DESCRIPTION This script shuts down the XVM of a web service partition
+##VAR PARTITION [displayName="Partition", type=String, validValues="1,2,3", description="The partition to shut down"] 
+
+assume provision_all has run
+
+// stop the web service app in he first XVM instance
+stop the demo-pricingserviceweb-${PARTITION::1} app in the demo-pricingserviceweb.${PARTITION::1} xvm
+
+// shutdown the XVMs
+shutdown the demo-pricingserviceweb.${PARTITION::1} xvm
+
